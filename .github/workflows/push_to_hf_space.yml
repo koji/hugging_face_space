@@ -1,0 +1,21 @@
+name: Push to Hugging Face Space
+on:
+  push:
+    branches:
+      - '**'
+      - '!main' # Exclude main branch
+
+jobs:
+  push-to-hf-space:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Push to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git remote add space https://huggingface.co/spaces/baxin/gh_action
+          git push space ${{ github.ref }}:${{ github.ref }}

@@ -1,0 +1,18 @@
+name: Delete Branch on Hugging Face Space
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  delete-branch:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true # Only run if PR is merged
+    steps:
+      - name: Delete branch from Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          branch_name=${{ github.head_ref }}
+          git push https://huggingface.co/spaces/baxin/gh_action --delete $branch_name
