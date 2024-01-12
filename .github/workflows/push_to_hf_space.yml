@@ -1,21 +1,19 @@
-name: Push to Hugging Face Space
+name: Sync with Hugging Face Hub
+
 on:
   push:
     branches:
-      - '**'
-      - '!main' # Exclude main branch
+      - main
 
 jobs:
-  push-to-hf-space:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          lfs: true
-      - name: Push to Hugging Face Space
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: |
-          git remote add space https://huggingface.co/spaces/baxin/gh_action
-          git push space ${{ github.ref }}:${{ github.ref }}
+    - name: Sync with Hugging Face
+      uses: nateraw/huggingface-sync-action@v0.0.4
+      with:
+        github_repo_id: koji/hugging_face_space
+        huggingface_repo_id: baxin/gh_action
+        repo_type: space
+        space_sdk: gradio
+        hf_token: ${{ secrets.HF_TOKEN }}
