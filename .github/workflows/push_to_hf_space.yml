@@ -17,5 +17,7 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
+          git config --global credential.helper store
+          echo "machine huggingface.co login $HF_TOKEN password x-oauth-basic" > ~/.git-credentials
           git remote add space https://huggingface.co/spaces/baxin/gh_action
           git push space ${{ github.ref }}:${{ github.ref }}
